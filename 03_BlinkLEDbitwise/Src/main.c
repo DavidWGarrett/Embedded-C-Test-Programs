@@ -44,11 +44,12 @@ Address of the GPIO output data register - used to write (GPIOx_ODR)
 
 int main(void)
 {
-	uint32_t* pRccEn = (uint32_t*)0x40023830;
-	uint32_t* pGpioMode = (uint32_t*)0x40020C00;
-	uint32_t* pGpioOutputD2 = (uint32_t*)0x40020C14;
-	uint32_t* pGpioModeC11 = (uint32_t*)0x40020800;
-	uint32_t* pGpioInputC11 = (uint32_t*) 0x40020810;
+	uint32_t volatile *const pRccEn = (uint32_t*)0x40023830;
+	uint32_t volatile *const pGpioMode = (uint32_t*)0x40020C00;
+	uint32_t volatile *const pGpioOutputD2 = (uint32_t*)0x40020C14;
+	uint32_t volatile *const pGpioModeC11 = (uint32_t*)0x40020800;
+	uint32_t const volatile *const pGpioInputC11 = (uint32_t*) 0x40020810;
+	uint32_t on;
 
 
 	*pRccEn |= (0b11 << 2); // turn gpio c and d
@@ -68,7 +69,7 @@ int main(void)
 	// This turns on IDR2 ????
 	while(1)
 	{
-		uint32_t on = ((*pGpioInputC11 >> 11) & 0x1);
+		on = ((*pGpioInputC11 >> 11) & 0x1);
 
 		if (on)
 		{
